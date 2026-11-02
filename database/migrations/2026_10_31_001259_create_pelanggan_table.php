@@ -10,7 +10,8 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(){
-       Schema::create('pelanggan', function (Blueprint $table) {
+       if (Schema::hasTable('pelanggan')) { return; }
+        Schema::create('pelanggan', function (Blueprint $table) {
         $table->increments('pelanggan_id');
         $table->string('first_name', 100);
         $table->string('last_name', 100);
