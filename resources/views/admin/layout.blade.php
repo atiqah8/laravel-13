@@ -32,6 +32,16 @@
                         <span class="mt-1 ms-1 sidebar-text">Lihat CV</span>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('profil.*') ? 'active' : '' }}">
+                    <a href="{{ route('profil.edit') }}" class="nav-link">
+                        <span class="sidebar-text">Profil</span>
+                    </a>
+                </li>
+                <li class="nav-item {{ request()->routeIs('pendidikan.*') ? 'active' : '' }}">
+                    <a href="{{ route('pendidikan.index') }}" class="nav-link">
+                        <span class="sidebar-text">Pendidikan</span>
+                    </a>
+                </li>
                 <li class="nav-item {{ request()->routeIs('portofolio.*') ? 'active' : '' }}">
                     <a href="{{ route('portofolio.index') }}" class="nav-link">
                         <span class="sidebar-text">Portofolio</span>

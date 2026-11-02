@@ -1,13 +1,3 @@
-@php
-    // === EDIT DATA DIRI DI SINI ===
-    $profil = [
-        'nama'    => 'Atiqah Nur Aqillah',
-        'peran'   => 'Mahasiswa Teknik Informatika',
-        'tentang' => 'Mahasiswa yang suka membangun aplikasi web dengan Laravel dan MySQL. Senang belajar hal baru dan mengerjakan proyek nyata.',
-        'email'   => 'atiqa25ti@mahasiswa,pcr.ac.id',
-        'lokasi'  => 'Indonesia',
-    ];
-@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -44,6 +34,15 @@
         .tags { margin-top:auto; }
         .tags span { display:inline-block; font-size:12px; border:1px solid var(--line); padding:2px 10px; border-radius:999px; margin: 0 6px 6px 0; color:var(--muted); }
         .card a.link { color:var(--accent); font-weight:600; text-decoration:none; font-size:14px; }
+        .hero .wrap { display:flex; align-items:center; gap:32px; flex-wrap:wrap; }
+        .hero .teks { flex:1; min-width:260px; }
+        .foto { width:150px; height:150px; border-radius:50%; object-fit:cover; border:4px solid rgba(255,255,255,.55); background:rgba(255,255,255,.15); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:56px; font-weight:700; color:#fff; }
+        .edu { border-left:2px solid var(--accent); padding-left:18px; margin-left:6px; }
+        .edu .item { position:relative; margin-bottom:20px; }
+        .edu .item::before { content:""; position:absolute; left:-25px; top:7px; width:12px; height:12px; border-radius:50%; background:var(--accent); }
+        .edu h3 { margin:0; font-size:17px; }
+        .edu .th { color:var(--muted); font-size:14px; }
+        .edu p { margin:4px 0 0; color:var(--muted); font-size:15px; }
         .kosong { color:var(--muted); }
         footer { margin-top: 48px; padding: 24px 0; border-top:1px solid var(--line); color:var(--muted); font-size:14px; }
         footer a { color: var(--accent); }
@@ -52,17 +51,39 @@
 <body>
     <header class="hero">
         <div class="wrap">
-            <h1>{{ $profil['nama'] }}</h1>
-            <div class="peran">{{ $profil['peran'] }}</div>
-            <p>{{ $profil['tentang'] }}</p>
-            <div class="chips">
-                <span>{{ $profil['email'] }}</span>
-                <span>{{ $profil['lokasi'] }}</span>
+            @if ($profil['foto'])
+                <img class="foto" src="{{ asset('uploads/profil/' . $profil['foto']) }}" alt="{{ $profil['nama'] }}">
+            @else
+                <div class="foto">{{ strtoupper(mb_substr($profil['nama'], 0, 1)) }}</div>
+            @endif
+            <div class="teks">
+                <h1>{{ $profil['nama'] }}</h1>
+                <div class="peran">{{ $profil['peran'] }}</div>
+                <p>{{ $profil['tentang'] }}</p>
+                <div class="chips">
+                    @if ($profil['email'])<span>{{ $profil['email'] }}</span>@endif
+                    @if ($profil['lokasi'])<span>{{ $profil['lokasi'] }}</span>@endif
+                </div>
             </div>
         </div>
     </header>
 
     <div class="wrap">
+        <section>
+            <h2>Pendidikan</h2>
+            <div class="edu">
+                @forelse ($dataPendidikan as $e)
+                    <div class="item">
+                        <h3>{{ $e->institusi }}</h3>
+                        <div class="th">{{ $e->jurusan }} &middot; {{ $e->tahun_masuk }} - {{ $e->tahun_lulus ?: 'sekarang' }}</div>
+                        @if ($e->keterangan)<p>{{ $e->keterangan }}</p>@endif
+                    </div>
+                @empty
+                    <p class="kosong">Belum ada riwayat pendidikan. Tambahkan lewat halaman admin.</p>
+                @endforelse
+            </div>
+        </section>
+
         <section>
             <h2>Skill</h2>
             @forelse ($dataSkill as $s)
@@ -113,7 +134,7 @@
 
         <footer>
             &copy; {{ date('Y') }} {{ $profil['nama'] }} &middot;
-            <a href="{{ route('portofolio.index') }}">Kelola data (admin)</a>
+            <a href="{{ route('profil.edit') }}">Kelola data (admin)</a>
         </footer>
     </div>
 </body>
